@@ -10,6 +10,10 @@
     "init-data": "sleep 15 && npm run create-users && sleep 2 && npm run create-news",
     "create-users": "node scripts/create-users.js",
     "create-news": "node scripts/create-news.js",
+    "view-db": "node scripts/view-database.js",
+    "view-users": "node scripts/view-database.js users",
+    "view-actualites": "node scripts/view-database.js actualites",
+    "db-stats": "node scripts/view-database.js stats",
     "stop": "docker-compose down && pkill -f \"dotnet run\" && pkill -f \"ng serve\"",
     "clean": "npm run stop && docker-compose down -v && cd actualites-frontend && rm -rf node_modules && npm install",
     "test": "echo \"Tests à implémenter\" && exit 0"

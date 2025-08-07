@@ -63,7 +63,9 @@ export class DashboardComponent implements OnInit {
   }
 
   onActualiteClick(actualite: Actualite): void {
-    this.router.navigate(['/actualites', actualite.id]);
+    this.router.navigate(['/actualites', actualite.id], { 
+      queryParams: { returnUrl: '/dashboard' } 
+    });
   }
 
   onViewAllActualites(): void {

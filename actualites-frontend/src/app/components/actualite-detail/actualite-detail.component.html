@@ -12,7 +12,7 @@
     <p>L'actualité demandée n'existe pas ou vous n'avez pas les droits pour la consulter.</p>
     <button mat-raised-button color="primary" (click)="goBack()">
       <mat-icon>arrow_back</mat-icon>
-      Retour à la liste
+      {{ getBackButtonText() }}
     </button>
   </div>
 
@@ -22,7 +22,7 @@
     <div class="header-actions">
       <button mat-button (click)="goBack()">
         <mat-icon>arrow_back</mat-icon>
-        Retour à la liste
+        {{ getBackButtonText() }}
       </button>
 
       <div class="action-buttons" *ngIf="canEditActualite()">

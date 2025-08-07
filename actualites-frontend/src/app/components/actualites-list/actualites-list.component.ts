@@ -74,7 +74,9 @@ export class ActualitesListComponent implements OnInit {
   }
 
   viewActualite(id: string): void {
-    this.router.navigate(['/actualites', id]);
+    this.router.navigate(['/actualites', id], { 
+      queryParams: { returnUrl: '/actualites' } 
+    });
   }
 
   editActualite(id: string): void {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,16 +34,24 @@ export class ActualiteDetailComponent implements OnInit {
   currentUser: User | null = null;
   loading = true;
   error = false;
+  returnUrl: string = '/dashboard'; // URL de retour par défaut
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
     private actualiteService: ActualiteService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.currentUserValue;
+    
+    // Déterminer l'URL de retour basée sur le paramètre de requête
+    const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+    if (returnUrl) {
+      this.returnUrl = returnUrl;
+    }
     
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -70,7 +78,13 @@ export class ActualiteDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/actualites']);
+    // Navigation intelligente : retourner à la page d'origine ou utiliser l'historique
+    if (this.returnUrl && this.returnUrl !== '/dashboard') {
+      this.router.navigate([this.returnUrl]);
+    } else {
+      // Utiliser l'historique du navigateur pour revenir à la page précédente
+      this.location.back();
+    }
   }
 
   editActualite(): void {
@@ -135,5 +149,15 @@ export class ActualiteDetailComponent implements OnInit {
     const expiration = new Date(this.actualite.dateExpiration);
     const diffTime = expiration.getTime() - today.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  getBackButtonText(): string {
+    if (this.returnUrl === '/dashboard') {
+      return 'Retour au Dashboard';
+    } else if (this.returnUrl === '/actualites') {
+      return 'Retour à la liste';
+    } else {
+      return 'Retour';
+    }
   }
 }
