@@ -1,1 +1,100 @@
-<p>actualites-list works!</p>
+<div class="actualites-list-container">
+  <div class="header">
+    <h1>📰 Liste des Actualités</h1>
+    <button 
+      *ngIf="canCreateActualite()" 
+      mat-raised-button 
+      color="primary" 
+      (click)="createActualite()"
+      class="create-button">
+      <mat-icon>add</mat-icon>
+      Nouvelle Actualité
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Chargement des actualités...</p>
+  </div>
+
+  <div *ngIf="!loading && actualites.length === 0" class="no-actualites">
+    <mat-icon>info</mat-icon>
+    <h3>Aucune actualité disponible</h3>
+    <p>Il n'y a actuellement aucune actualité à afficher pour votre profil.</p>
+  </div>
+
+  <div *ngIf="!loading && actualites.length > 0" class="actualites-grid">
+    <mat-card *ngFor="let actualite of actualites" class="actualite-card">
+      <mat-card-header>
+        <mat-card-title>{{ actualite.titre }}</mat-card-title>
+        <mat-card-subtitle>
+          Par {{ actualite.createurInfo.prenom }} {{ actualite.createurInfo.nom }} 
+          • {{ formatDate(actualite.datePublication) }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="description">
+          {{ actualite.description | slice:0:150 }}
+          <span *ngIf="actualite.description.length > 150">...</span>
+        </div>
+
+        <div class="profils-diffusion">
+          <mat-chip-set>
+            <mat-chip 
+              *ngFor="let profil of actualite.profilsDiffusion" 
+              [color]="getProfilColor(profil)"
+              selected>
+              {{ profil | titlecase }}
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <div class="dates">
+          <div class="date-info">
+            <mat-icon>schedule</mat-icon>
+            <span>Expire le {{ formatDate(actualite.dateExpiration) }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button 
+          mat-button 
+          color="primary" 
+          (click)="viewActualite(actualite.id)">
+          <mat-icon>visibility</mat-icon>
+          Voir
+        </button>
+        
+        <button 
+          *ngIf="canEditActualite(actualite)"
+          mat-button 
+          color="accent" 
+          (click)="editActualite(actualite.id)">
+          <mat-icon>edit</mat-icon>
+          Modifier
+        </button>
+        
+        <button 
+          *ngIf="canEditActualite(actualite)"
+          mat-button 
+          color="warn" 
+          (click)="deleteActualite(actualite)">
+          <mat-icon>delete</mat-icon>
+          Supprimer
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <mat-paginator
+    *ngIf="!loading && actualites.length > 0"
+    [length]="totalActualites"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage"
+    [pageSizeOptions]="[5, 10, 15]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>

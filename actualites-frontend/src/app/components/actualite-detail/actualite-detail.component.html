@@ -1,1 +1,146 @@
-<p>actualite-detail works!</p>
+<div class="actualite-detail-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Chargement de l'actualité...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <mat-icon>error</mat-icon>
+    <h2>Actualité introuvable</h2>
+    <p>L'actualité demandée n'existe pas ou vous n'avez pas les droits pour la consulter.</p>
+    <button mat-raised-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Retour à la liste
+    </button>
+  </div>
+
+  <!-- Actualité Content -->
+  <div *ngIf="actualite && !loading" class="actualite-content">
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <button mat-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Retour à la liste
+      </button>
+
+      <div class="action-buttons" *ngIf="canEditActualite()">
+        <button mat-button color="accent" (click)="editActualite()">
+          <mat-icon>edit</mat-icon>
+          Modifier
+        </button>
+        <button mat-button color="warn" (click)="deleteActualite()">
+          <mat-icon>delete</mat-icon>
+          Supprimer
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Card -->
+    <mat-card class="actualite-card">
+      <!-- Title and Status -->
+      <mat-card-header>
+        <div class="title-section">
+          <mat-card-title>{{ actualite.titre }}</mat-card-title>
+          <div class="status-badges">
+            <span 
+              class="status-badge" 
+              [class.expired]="isExpired()"
+              [class.expiring-soon]="getDaysUntilExpiration() <= 7 && !isExpired()">
+              <mat-icon>{{ isExpired() ? 'expired' : 'schedule' }}</mat-icon>
+              {{ isExpired() ? 'Expirée' : getDaysUntilExpiration() + ' jours restants' }}
+            </span>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Author and Dates -->
+        <div class="meta-info">
+          <div class="author-info">
+            <mat-icon>person</mat-icon>
+            <span>
+              Créée par <strong>{{ actualite.createurInfo.prenom }} {{ actualite.createurInfo.nom }}</strong>
+              ({{ actualite.createurInfo.profil | titlecase }})
+            </span>
+          </div>
+          
+          <div class="dates-info">
+            <div class="date-item">
+              <mat-icon>calendar_today</mat-icon>
+              <span>Publiée le {{ formatDate(actualite.datePublication) }}</span>
+            </div>
+            <div class="date-item">
+              <mat-icon>event</mat-icon>
+              <span>Expire le {{ formatDate(actualite.dateExpiration) }}</span>
+            </div>
+            <div class="date-item" *ngIf="actualite.dateModification">
+              <mat-icon>update</mat-icon>
+              <span>Modifiée le {{ formatDateTime(actualite.dateModification) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Target Profiles -->
+        <div class="profils-section">
+          <h3>
+            <mat-icon>group</mat-icon>
+            Destinataires
+          </h3>
+          <mat-chip-set>
+            <mat-chip 
+              *ngFor="let profil of actualite.profilsDiffusion" 
+              [color]="getProfilColor(profil)"
+              selected>
+              <mat-icon>{{ profil === 'eleve' ? 'school' : profil === 'professeur' ? 'person' : 'admin_panel_settings' }}</mat-icon>
+              {{ profil | titlecase }}
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Main Content -->
+        <div class="description-section">
+          <h3>
+            <mat-icon>description</mat-icon>
+            Contenu
+          </h3>
+          <div class="description-content">
+            {{ actualite.description }}
+          </div>
+        </div>
+
+        <!-- Image if present -->
+        <div *ngIf="actualite.image" class="image-section">
+          <h3>
+            <mat-icon>image</mat-icon>
+            Image
+          </h3>
+          <img [src]="actualite.image" [alt]="actualite.titre" class="actualite-image">
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Technical Info -->
+        <div class="technical-info">
+          <div class="tech-item">
+            <strong>ID:</strong> {{ actualite.id }}
+          </div>
+          <div class="tech-item">
+            <strong>Créée le:</strong> {{ formatDateTime(actualite.dateCreation) }}
+          </div>
+          <div class="tech-item">
+            <strong>Statut:</strong> 
+            <span [class]="actualite.actif ? 'active' : 'inactive'">
+              {{ actualite.actif ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

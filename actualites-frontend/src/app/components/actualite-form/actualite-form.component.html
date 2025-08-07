@@ -1,1 +1,158 @@
-<p>actualite-form works!</p>
+<div class="actualite-form-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Chargement...</p>
+  </div>
+
+  <!-- Form -->
+  <div *ngIf="!loading" class="form-content">
+    <div class="header">
+      <h1>
+        <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
+        {{ getTitle() }}
+      </h1>
+    </div>
+
+    <mat-card class="form-card">
+      <mat-card-content>
+        <form [formGroup]="actualiteForm" (ngSubmit)="onSubmit()" class="actualite-form">
+          
+          <!-- Titre -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Titre de l'actualité</mat-label>
+            <input matInput formControlName="titre" placeholder="Entrez le titre de l'actualité">
+            <mat-icon matSuffix>title</mat-icon>
+            <mat-error *ngIf="getFieldError('titre')">{{ getFieldError('titre') }}</mat-error>
+          </mat-form-field>
+
+          <!-- Description -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea 
+              matInput 
+              formControlName="description" 
+              placeholder="Décrivez le contenu de l'actualité"
+              rows="6">
+            </textarea>
+            <mat-icon matSuffix>description</mat-icon>
+            <mat-error *ngIf="getFieldError('description')">{{ getFieldError('description') }}</mat-error>
+          </mat-form-field>
+
+          <!-- Profils de diffusion -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Destinataires</mat-label>
+            <mat-select formControlName="profilsDiffusion" multiple>
+              <mat-option *ngFor="let profil of profilsOptions" [value]="profil.value">
+                <mat-icon>{{ profil.icon }}</mat-icon>
+                {{ profil.label }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>group</mat-icon>
+            <mat-error *ngIf="actualiteForm.get('profilsDiffusion')?.hasError('required') && actualiteForm.get('profilsDiffusion')?.touched">
+              Veuillez sélectionner au moins un destinataire
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Dates -->
+          <div class="dates-row">
+            <mat-form-field appearance="outline" class="date-field">
+              <mat-label>Date de publication</mat-label>
+              <input 
+                matInput 
+                [matDatepicker]="publicationPicker" 
+                formControlName="datePublication"
+                placeholder="Sélectionnez la date">
+              <mat-datepicker-toggle matIconSuffix [for]="publicationPicker"></mat-datepicker-toggle>
+              <mat-datepicker #publicationPicker></mat-datepicker>
+              <mat-error *ngIf="getFieldError('datePublication')">{{ getFieldError('datePublication') }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="date-field">
+              <mat-label>Date d'expiration</mat-label>
+              <input 
+                matInput 
+                [matDatepicker]="expirationPicker" 
+                formControlName="dateExpiration"
+                placeholder="Sélectionnez la date">
+              <mat-datepicker-toggle matIconSuffix [for]="expirationPicker"></mat-datepicker-toggle>
+              <mat-datepicker #expirationPicker></mat-datepicker>
+              <mat-error *ngIf="getFieldError('dateExpiration')">{{ getFieldError('dateExpiration') }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Erreur de validation des dates -->
+          <div *ngIf="hasDateError()" class="date-error">
+            <mat-icon>error</mat-icon>
+            La date d'expiration doit être postérieure à la date de publication
+          </div>
+
+          <!-- Image (optionnel) -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>URL de l'image (optionnel)</mat-label>
+            <input matInput formControlName="image" placeholder="https://exemple.com/image.jpg">
+            <mat-icon matSuffix>image</mat-icon>
+          </mat-form-field>
+
+          <!-- Aperçu de l'image -->
+          <div *ngIf="actualiteForm.get('image')?.value" class="image-preview">
+            <h4>Aperçu de l'image :</h4>
+            <img [src]="actualiteForm.get('image')?.value" alt="Aperçu" class="preview-image">
+          </div>
+
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions align="end" class="form-actions">
+        <button 
+          mat-button 
+          type="button" 
+          (click)="cancel()"
+          [disabled]="saving">
+          <mat-icon>cancel</mat-icon>
+          Annuler
+        </button>
+        
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit"
+          (click)="onSubmit()"
+          [disabled]="actualiteForm.invalid || saving">
+          <mat-icon>{{ saving ? 'hourglass_empty' : (isEditMode ? 'save' : 'add') }}</mat-icon>
+          {{ getSubmitButtonText() }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Informations d'aide -->
+    <mat-card class="help-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>help</mat-icon>
+          Aide
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="help-section">
+          <h4>Destinataires :</h4>
+          <ul>
+            <li><strong>Élèves :</strong> L'actualité sera visible par tous les élèves</li>
+            <li><strong>Professeurs :</strong> L'actualité sera visible par tous les professeurs</li>
+            <li><strong>Direction :</strong> L'actualité sera visible par la direction</li>
+          </ul>
+        </div>
+        
+        <div class="help-section">
+          <h4>Conseils :</h4>
+          <ul>
+            <li>Utilisez un titre clair et concis (3-100 caractères)</li>
+            <li>Rédigez une description détaillée (10-1000 caractères)</li>
+            <li>Vérifiez que les dates sont cohérentes</li>
+            <li>L'image est optionnelle mais améliore la présentation</li>
+          </ul>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

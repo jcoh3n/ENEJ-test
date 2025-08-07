@@ -11,8 +11,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'actualites', component: ActualitesListComponent, canActivate: [authGuard] },
-  { path: 'actualites/:id', component: ActualiteDetailComponent, canActivate: [authGuard] },
   { path: 'actualites/new', component: ActualiteFormComponent, canActivate: [authGuard] },
+  { path: 'actualites/:id', component: ActualiteDetailComponent, canActivate: [authGuard] },
   { path: 'actualites/:id/edit', component: ActualiteFormComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/login' }
 ];

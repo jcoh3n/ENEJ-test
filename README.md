@@ -45,47 +45,44 @@ git clone <repository-url>
 cd ENEJ-test
 ```
 
-### 2. Démarrage automatique (recommandé)
+### 2. Installation et démarrage complet
 ```bash
-# Démarrer tous les services
-./start-project.sh
-```
-
-### 3. Démarrage manuel
-
-#### MongoDB
-```bash
-docker-compose up -d mongodb
-```
-
-#### Backend .NET
-```bash
-cd ActualitesApi
-dotnet restore
-dotnet run --urls="http://localhost:5000"
-```
-
-#### Frontend Angular
-```bash
-cd actualites-frontend
+# Installer les dépendances
 npm install
-npm start
+cd actualites-frontend && npm install && cd ..
+
+# Démarrer l'environnement complet de développement
+npm run dev
 ```
 
-### 4. Initialisation des données de test
+**C'est tout ! 🎉** 
+
+La commande `npm run dev` :
+- ✅ Lance MongoDB via Docker Compose
+- ✅ Démarre l'API .NET sur http://localhost:5000
+- ✅ Lance le frontend Angular sur http://localhost:4200
+- ✅ Crée automatiquement les utilisateurs de test
+- ✅ Génère les actualités d'exemple
+
+### 3. Autres commandes utiles
 ```bash
-# Créer les utilisateurs de test
-./create-test-users.sh
+# Arrêter tous les services
+npm run stop
 
-# Créer les actualités de test
-./create-test-actualites.sh
+# Nettoyer et redémarrer complètement
+npm run clean
+
+# Démarrage manuel (si besoin)
+npm run backend    # API .NET seulement
+npm run frontend   # Angular seulement
 ```
 
-## 🌐 Accès à l'application
+### 4. Accès à l'application
 
+Après quelques secondes, l'application sera accessible sur :
 - **Frontend Angular** : http://localhost:4200
 - **API Backend** : http://localhost:5000
-- **API Documentation** : http://localhost:5000/swagger
+- **Documentation API (Swagger)** : http://localhost:5000/swagger
 - **MongoDB** : localhost:27017
 
 ## 👤 Comptes de test
