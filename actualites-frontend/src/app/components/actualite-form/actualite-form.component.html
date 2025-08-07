@@ -8,10 +8,16 @@
   <!-- Form -->
   <div *ngIf="!loading" class="form-content">
     <div class="header">
-      <h1>
-        <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
-        {{ getTitle() }}
-      </h1>
+      <div class="header-left">
+        <button mat-button (click)="goBack()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+          Retour à la liste
+        </button>
+        <h1>
+          <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
+          {{ getTitle() }}
+        </h1>
+      </div>
     </div>
 
     <mat-card class="form-card">

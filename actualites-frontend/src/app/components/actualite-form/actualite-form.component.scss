@@ -23,19 +23,37 @@
     .header {
       margin-bottom: 30px;
 
-      h1 {
+      .header-left {
         display: flex;
         align-items: center;
-        margin: 0;
-        color: #333;
-        font-weight: 500;
-        font-size: 28px;
+        gap: 16px;
 
-        mat-icon {
-          margin-right: 12px;
-          font-size: 32px;
-          width: 32px;
-          height: 32px;
+        .back-button {
+          color: #666;
+          
+          mat-icon {
+            margin-right: 4px;
+          }
+
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+          }
+        }
+
+        h1 {
+          display: flex;
+          align-items: center;
+          margin: 0;
+          color: #333;
+          font-weight: 500;
+          font-size: 28px;
+
+          mat-icon {
+            margin-right: 12px;
+            font-size: 32px;
+            width: 32px;
+            height: 32px;
+          }
         }
       }
     }

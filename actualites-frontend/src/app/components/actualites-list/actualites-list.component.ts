@@ -123,4 +123,8 @@ export class ActualitesListComponent implements OnInit {
   formatDate(date: Date | string): string {
     return new Date(date).toLocaleDateString('fr-FR');
   }
+
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
 }

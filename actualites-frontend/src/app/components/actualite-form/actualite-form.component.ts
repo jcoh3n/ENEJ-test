@@ -214,4 +214,8 @@ export class ActualiteFormComponent implements OnInit {
     }
     return this.isEditMode ? 'Modifier' : 'Créer';
   }
+
+  goBack(): void {
+    this.router.navigate(['/actualites']);
+  }
 }

@@ -1,6 +1,12 @@
 <div class="actualites-list-container">
   <div class="header">
-    <h1>📰 Liste des Actualités</h1>
+    <div class="header-left">
+      <button mat-button (click)="goToDashboard()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+        Retour au Dashboard
+      </button>
+      <h1>📰 Liste des Actualités</h1>
+    </div>
     <button 
       *ngIf="canCreateActualite()" 
       mat-raised-button 
