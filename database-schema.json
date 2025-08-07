@@ -1,0 +1,64 @@
+{
+  "users": {
+    "collection": "users",
+    "description": "Collection des utilisateurs de l'application",
+    "schema": {
+      "_id": "ObjectId",
+      "nom": "string (required)",
+      "prenom": "string (required)", 
+      "profil": "string (required, enum: ['eleve', 'professeur', 'direction'])",
+      "login": "string (required, unique)",
+              "motDePasse": "string (required, hashed)",
+      "dateCreation": "Date (default: now)",
+      "derniereConnexion": "Date"
+    },
+    "indexes": [
+      { "login": 1, "unique": true },
+      { "profil": 1 }
+    ]
+  },
+  "actualites": {
+    "collection": "actualites",
+    "description": "Collection des actualités publiées",
+    "schema": {
+      "_id": "ObjectId",
+      "titre": "string (required)",
+      "profilsDiffusion": "array of strings (required, contains: ['eleve', 'professeur', 'direction'])",
+      "description": "string (required)",
+      "image": "string (optional, URL ou chemin vers l'image)",
+      "datePublication": "Date (required)",
+      "dateExpiration": "Date (required)",
+      "createurId": "ObjectId (required, référence vers users._id)",
+      "createurInfo": {
+        "nom": "string",
+        "prenom": "string",
+        "profil": "string"
+      },
+      "dateCreation": "Date (default: now)",
+      "dateModification": "Date",
+      "actif": "boolean (default: true)"
+    },
+    "indexes": [
+      { "datePublication": -1 },
+      { "profilsDiffusion": 1 },
+      { "createurId": 1 },
+      { "dateExpiration": 1 },
+      { "actif": 1 }
+    ]
+  },
+  "actualites_lectures": {
+    "collection": "actualites_lectures",
+    "description": "Collection pour tracker les lectures des actualités (bonus)",
+    "schema": {
+      "_id": "ObjectId",
+      "actualiteId": "ObjectId (required, référence vers actualites._id)",
+      "utilisateurId": "ObjectId (required, référence vers users._id)",
+      "dateLecture": "Date (default: now)"
+    },
+    "indexes": [
+      { "actualiteId": 1, "utilisateurId": 1, "unique": true },
+      { "utilisateurId": 1 },
+      { "dateLecture": -1 }
+    ]
+  }
+}
