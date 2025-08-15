@@ -49,7 +49,7 @@ cd ENEJ-test
 ```bash
 # Installer les dépendances
 npm install
-cd actualites-frontend && npm install && cd ..
+cd frontend && npm install && cd ..
 
 # Démarrer l'environnement complet de développement
 npm run dev

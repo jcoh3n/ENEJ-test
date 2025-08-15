@@ -1,12 +1,12 @@
 {
-  "name": "actualites-management-app",
+  "name": "school-news-ENEJ",
   "version": "1.0.0",
   "description": "Application de gestion des actualités - Angular + .NET + MongoDB",
   "scripts": {
     "dev": "npm run setup && concurrently \"npm run backend\" \"npm run frontend\" \"npm run init-data\"",
     "setup": "docker-compose up -d",
-    "backend": "cd ActualitesApi && /home/j/.dotnet/dotnet run --urls=\"http://localhost:5000\"",
-    "frontend": "cd actualites-frontend && npm start",
+    "backend": "cd backend && /home/j/.dotnet/dotnet run --urls=\"http://localhost:5000\"",
+    "frontend": "cd frontend && npm start",
     "init-data": "sleep 15 && npm run create-users && sleep 2 && npm run create-news",
     "create-users": "node scripts/create-users.js",
     "create-news": "node scripts/create-news.js",
@@ -15,7 +15,7 @@
     "view-actualites": "node scripts/view-database.js actualites",
     "db-stats": "node scripts/view-database.js stats",
     "stop": "docker-compose down && pkill -f \"dotnet run\" && pkill -f \"ng serve\"",
-    "clean": "npm run stop && docker-compose down -v && cd actualites-frontend && rm -rf node_modules && npm install",
+    "clean": "npm run stop && docker-compose down -v && cd frontend && rm -rf node_modules && npm install",
     "test": "echo \"Tests à implémenter\" && exit 0"
   },
   "devDependencies": {
@@ -26,6 +26,5 @@
     "bcryptjs": "^2.4.3"
   },
   "keywords": ["angular", "dotnet", "mongodb", "actualites", "news-management"],
-  "author": "Développeur ENEJ",
-  "license": "MIT"
+  "author": "Joey Cohen"
 }

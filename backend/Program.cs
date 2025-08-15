@@ -1,5 +1,5 @@
-using ActualitesApi.Data;
-using ActualitesApi.Services;
+using backend.Data;
+using backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

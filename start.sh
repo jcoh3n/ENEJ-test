@@ -1,8 +1,5 @@
 #!/bin/bash
-
-echo "🔍 DIAGNOSTIC COMPLET ET LANCEMENT DU PROJET"
-echo "=============================================="
-echo ""
+# Script de démarrage pour l'application Angular + .NET + MongoDB
 
 # Couleurs pour les messages
 GREEN='\033[0;32m'
@@ -58,14 +55,14 @@ else
 fi
 
 # Vérifier les fichiers du projet
-if [ -f "actualites-frontend/package.json" ]; then
+if [ -f "frontend/package.json" ]; then
     success "Frontend package.json trouvé"
 else
     error "Frontend package.json manquant!"
     exit 1
 fi
 
-if [ -f "ActualitesApi/ActualitesApi.csproj" ]; then
+if [ -f "backend/backend.csproj" ]; then
     success "Backend .csproj trouvé"
 else
     error "Backend .csproj manquant!"
@@ -77,18 +74,18 @@ echo "🔧 ÉTAPE 3: Nettoyage complet des caches"
 echo "========================================"
 
 # Nettoyer les caches Angular
-if [ -d "actualites-frontend/.angular" ]; then
-    rm -rf actualites-frontend/.angular
+if [ -d "frontend/.angular" ]; then
+    rm -rf frontend/.angular
     success "Cache Angular supprimé"
 fi
 
-if [ -d "actualites-frontend/dist" ]; then
-    rm -rf actualites-frontend/dist
+if [ -d "frontend/dist" ]; then
+    rm -rf frontend/dist
     success "Dossier dist supprimé"
 fi
 
-if [ -d "actualites-frontend/node_modules/.cache" ]; then
-    rm -rf actualites-frontend/node_modules/.cache
+if [ -d "frontend/node_modules/.cache" ]; then
+    rm -rf frontend/node_modules/.cache
     success "Cache node_modules supprimé"
 fi
 
@@ -97,7 +94,7 @@ echo "🔧 ÉTAPE 4: Installation/Vérification des dépendances"
 echo "===================================================="
 
 # Vérifier les dépendances Angular
-cd actualites-frontend
+cd frontend
 if [ ! -d "node_modules" ] || [ ! -f "node_modules/.bin/ng" ]; then
     info "Installation des dépendances Angular..."
     npm install
@@ -138,7 +135,7 @@ fi
 
 # Démarrer le backend .NET
 info "Démarrage du backend .NET..."
-cd ActualitesApi
+cd backend
 /home/j/.dotnet/dotnet run --urls="http://localhost:5000" &
 BACKEND_PID=$!
 cd ..
@@ -160,7 +157,7 @@ done
 
 # Démarrer le frontend Angular
 info "Démarrage du frontend Angular..."
-cd actualites-frontend
+cd frontend
 npm start &
 FRONTEND_PID=$!
 cd ..
@@ -238,10 +235,6 @@ else
     warning "API: Données limitées ou absentes"
 fi
 
-echo ""
-echo "🎉 DIAGNOSTIC TERMINÉ"
-echo "===================="
-echo ""
 success "✅ MongoDB: http://localhost:27017"
 success "✅ Backend .NET: http://localhost:5000"
 success "✅ Swagger API: http://localhost:5000/swagger"

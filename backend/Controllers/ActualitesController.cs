@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using ActualitesApi.Services;
-using ActualitesApi.Models;
+using backend.Services;
+using backend.Models;
 
-namespace ActualitesApi.Controllers
+namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

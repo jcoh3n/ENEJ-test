@@ -1,7 +1,7 @@
 using MongoDB.Driver;
-using ActualitesApi.Models;
+using backend.Models;
 
-namespace ActualitesApi.Data
+namespace backend.Data
 {
     public class MongoDbContext
     {

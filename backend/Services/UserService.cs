@@ -1,9 +1,9 @@
 using MongoDB.Driver;
-using ActualitesApi.Data;
-using ActualitesApi.Models;
+using backend.Data;
+using backend.Models;
 using BCrypt.Net;
 
-namespace ActualitesApi.Services
+namespace backend.Services
 {
     public interface IUserService
     {
