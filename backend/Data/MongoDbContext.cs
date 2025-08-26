@@ -10,7 +10,7 @@ namespace backend.Data
         public MongoDbContext(IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("MongoDB") ?? "mongodb://localhost:27017";
-            var databaseName = configuration["DatabaseName"] ?? "ActualitesDb";
+            var databaseName = configuration["DatabaseName"] ?? "SchoolNewsDB";
             
             var client = new MongoClient(connectionString);
             _database = client.GetDatabase(databaseName);

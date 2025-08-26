@@ -76,11 +76,19 @@ async function waitForAPI() {
   const maxRetries = 30;
   for (let i = 0; i < maxRetries; i++) {
     try {
-      await axios.get(`${API_BASE}/auth/test`, { timeout: 1000 });
+      // Check if the login endpoint is accessible
+      await axios.post(`${API_BASE}/auth/login`, {}, { timeout: 1000 });
+      // We expect a 400 Bad Request here since we're not sending valid data,
+      // but it confirms the endpoint is reachable
       return true;
     } catch (error) {
+      // If it's not a network error, the API is likely ready
+      if (error.response) {
+        return true;
+      }
+      
       if (i === maxRetries - 1) {
-        console.error('❌ API non accessible après 30 tentatives');
+        console.error(`❌ API non accessible après ${maxRetries} tentatives`);
         return false;
       }
       await new Promise(resolve => setTimeout(resolve, 1000));
